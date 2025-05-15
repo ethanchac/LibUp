@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 router.post('/signup', async (req, res) => {
     const { email, password } = req.body;
-    console.log("trying to sign in");
+
     try{
         const existingUser = await User.findOne({email});
 
