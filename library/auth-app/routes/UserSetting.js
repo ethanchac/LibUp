@@ -26,5 +26,29 @@ router.get('/me', async (req, res) => {
         res.status(500).json({ msg: 'Server error', error: err.message});
     }
 });
+router.post('/add-book', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    const { book } = req.body;
+
+    if(!token){
+        return res.status(401).json({msg: 'no token'});
+    }
+    try{
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if(!user){
+            return res.status(404).json({msg: 'user not found'});
+        }
+
+        user.libraryItems.push(book);
+        await user.save();
+
+        return res.status(200).json({ msg: 'book added', book})
+    }catch(err){
+        console.log('error adding book:', err);
+        res.status(500).json({ msg: 'Server err'});
+    }
+});
 
 module.exports = router;
