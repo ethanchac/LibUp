@@ -2,6 +2,7 @@ import { useState, useEffect, use } from "react";
 
 function Home(){
     const [time, setTime] = useState(null);
+    
 
     useEffect(() => {
         fetch("http://worldtimeapi.org/api/timezone/America/Toronto")
@@ -26,9 +27,16 @@ function Home(){
     }
 
     return (
-        <div className="h-[98vh] p-[10px] m-[10px] bg-red-200 flex flex-col rounded-sm">
-            <p>{time}, 2025</p>
-        </div>
+        <>
+            <div className="h-[20vh] p-[10px] m-[10px] bg-white flex flex-col rounded-sm">
+                <p>{time}, 2025</p>
+            </div>
+            <div className="h-[75vh] p-[10px] m-[10px] bg-white flex flex-col rounded-sm">
+
+            </div>
+        </>
+
+        
     );
 }
 

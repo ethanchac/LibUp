@@ -1,16 +1,37 @@
-function Sidebar() {
-
+function Sidebar({ setshowModal }) {
     function homeClick(){
         alert("Home");
     }
 
-    return (
-    <div className="h-[98vh] p-[10px] m-[10px] bg-red-200 flex flex-col rounded-sm">
-        <button onClick={homeClick}>Home</button>
-        <button>Add</button>
-        <button>Remove</button>
+    function addLib(){
+        setshowModal(true);
+    }
 
-    </div>
+    function removeLib(){
+
+    }
+
+    return (
+        <div className="h-[98vh] p-[10px] m-[10px] bg-white flex flex-col rounded-sm">
+            <h1 className="font-bold text-2xl">LibUp</h1>
+            <button 
+                onClick={homeClick}
+                className="rounded-md px-4 py-2 hover:bg-gray-300 transition">
+                    Home
+            </button>
+            <button 
+                onClick={addLib}
+                className="rounded-md px-4 py-2 hover:bg-gray-300 transition">
+                    Add
+            </button>
+            <button 
+                onClick={removeLib}
+                className="rounded-md px-4 py-2 hover:bg-gray-300 transition">
+                    Remove
+            </button>
+            
+
+        </div>
     );
 }
 
