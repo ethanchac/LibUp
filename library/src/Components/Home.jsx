@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-function Home({ libitem }){
+function Home({ libitem, setshowModal, seteditingBook }){
     const [time, setTime] = useState(null);
     const navigate = useNavigate();
 
@@ -26,9 +26,11 @@ function Home({ libitem }){
             }
         }
     }
-    const editBook = async (lib) => {
-        
+    const editBook = (lib) => {
+        seteditingBook(lib);
+        setshowModal(true);
     }
+
     const handleLogout = async () => {
         localStorage.removeItem('token');
         navigate('/');
@@ -57,7 +59,7 @@ function Home({ libitem }){
                             
                             <p>Author: {lib.author}</p>
                             <p>Urgency: {lib.urgency}</p>
-                            <p>Status: {lib.read}</p>
+                            <p>Status: {lib.read ? 'Read' : 'Not Read'}</p>
                         </div>
                     ))}
                 </div>

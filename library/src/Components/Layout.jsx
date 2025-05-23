@@ -9,6 +9,8 @@ import axios from 'axios'
 function Layout(){
     const [showModal, setshowModal] = useState(false);
     const [libitem, setLibitem] = useState([]);
+    const [editingBook, seteditingBook] = useState(null);
+
     useEffect(() => {
         fetchLibraryItems();
     }, []);
@@ -44,15 +46,31 @@ function Layout(){
         
     }
 
+    const updateBook = async (updatedBookData) => {
+        const token = localStorage.getItem('token');
+        try{
+            await axios.put(
+                `http://localhost:5000/api/auth/user/update-book/${updatedBookData._id}`,
+                { book: updatedBookData },
+                {headers: {Authorization: `Bearer ${token}`}}
+            );
+            fetchLibraryItems();
+            return true;
+        }catch(err){
+            console.log("error updating book");
+            throw err;
+        }
+    }
+
     return (
         <div className="h-screen flex flex-row">
             <div className="flex-[0_0_10%] bg-gray-200 h-full">
-                <Sidebar setshowModal={setshowModal}/>
+                <Sidebar setshowModal={setshowModal} seteditingBook={seteditingBook}/>
             </div>
             <div className="flex-[0_0_90%] bg-gray-200 h-full">
-                <Home libitem={libitem}/>
+                <Home libitem={libitem} setshowModal={setshowModal} seteditingBook={seteditingBook}/>
             </div>
-            {showModal && <Modal setshowModal={setshowModal} setLibitem={setLibitem} addBook={addBook}/>}
+            {showModal && <Modal setshowModal={setshowModal} setLibitem={setLibitem} addBook={addBook} updateBook={updateBook} editingBook={editingBook}/>}
 
         </div>
     );

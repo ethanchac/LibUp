@@ -1,10 +1,12 @@
-function Sidebar({ setshowModal }) {
+function Sidebar({ setshowModal, seteditingBook }) {
     function homeClick(){
         alert("Home");
     }
 
     function addLib(){
+        seteditingBook(null);
         setshowModal(true);
+        
     }
 
     function removeLib(){

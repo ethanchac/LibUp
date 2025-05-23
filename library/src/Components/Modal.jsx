@@ -1,17 +1,36 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-function Modal({ setshowModal, setLibitem, addBook }){
+function Modal({ setshowModal, setLibitem, addBook, updateBook, editingBook }){
 
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [urgency, setUrgency] = useState("");
     const [read, setRead] = useState(false);
 
+
+    useEffect(() => {
+        if(editingBook){
+            setTitle(editingBook.title);
+            setAuthor(editingBook.author);
+            setUrgency(editingBook.urgency);
+            setRead(editingBook.read);
+        }else{
+            setTitle("");
+            setAuthor("");
+            setUrgency("");
+            setRead(false);
+        }
+
+    }, [editingBook])
     const closeModal = async() => {
         setshowModal(false)
     }
 
     const saveModal = async () => {
+        if (!title.trim() || !author.trim() || !urgency.trim()) {
+            alert("Please fill in all required fields (Title, Author, Urgency)");
+            return;
+        }
         const book = {
             title: title,
             author: author,
@@ -19,9 +38,16 @@ function Modal({ setshowModal, setLibitem, addBook }){
             read: read,
         }
         try{
-            const response = await addBook(book);
-            setLibitem(prevBooks => [...prevBooks, book]);
+            if(editingBook){
+                const updatedBook = { ...editingBook, ...book};
+                await updateBook(updatedBook);
+            }else{
+                await addBook(book);
+                setLibitem(prevBooks => [...prevBooks, book]);
+                
+            }
             setshowModal(false);
+            
         }catch(err){
             console.error("error adding book:", err);
         }
@@ -30,6 +56,9 @@ function Modal({ setshowModal, setLibitem, addBook }){
     return(
         <div className="fixed inset-0 bg-black bg-black/50 flex justify-center items-center z-[1000]">
             <div className="bg-white rounded-md w-[90%] max-w-[1000px] max-h-[90vh] overflow-y-auto shadow-[0_5px_15px_rgba(0,0,0,0.3)] flex flex-col p-4">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                    {editingBook ? 'Edit Book' : 'Add New Book'}
+                </h2>
                 <div className="mb-4">
                     <label htmlFor="book-title" className="block mb-2 font-medium text-gray-700">Title:</label>
                     <input
